@@ -13,4 +13,6 @@ export abstract class UserAuthenticationRepository {
 
     public abstract socialNetworksLogin(email: string, name: string, language: string, accessToken: string, imageUrl: string)
         : Promise<{ success: boolean, token: string }>;
+
+    public abstract isAdmin(id: number): Promise<void>;
 }

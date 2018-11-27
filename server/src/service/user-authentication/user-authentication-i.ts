@@ -240,4 +240,21 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
             }
         });
     }
+
+    public async isAdmin(id: number): Promise<void> {
+        try {
+            await RoleModel.findOne({
+                where: {
+                    userId: id,
+                    roleId: 2
+                }
+            });
+
+            this.loggerService.infoLog(`user with id ${id} is admin`);
+        } catch (err) {
+            this.loggerService.errorLog('this user isn`t admin');
+
+            throw {message: 'sequilize: this user isn`t admin'}
+        }
+    }
 }

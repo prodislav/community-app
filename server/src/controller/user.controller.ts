@@ -146,4 +146,23 @@ export class UserController {
         response.status(400).json(error);
     }
   }
+
+   /**
+    * @param {Request} request - data from request
+    * @param {object} request.body - data from request
+    * @param {number} request.body.id - user id
+    * after successful access checking,
+    * controller return status = 200
+    */
+  @httpPost('/isAdmin')
+  public async isAdmin(req: Request, res: Response): Promise<void | Response> {
+    const userId: number = req.body.id;
+    try {
+      await this.userAuthenticationRepository.isAdmin(userId);
+
+      return res.sendStatus(200);
+    } catch (err) {
+      return res.status(500).json(err.message);
+    }
+  }
 }
