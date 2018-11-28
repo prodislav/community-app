@@ -251,7 +251,6 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
             });
 
             if (user) {
-                this.loggerService.infoLog(`${user}`);
                 this.loggerService.infoLog(`user with id ${id} is admin`);
             } else {
                 throw Error();
