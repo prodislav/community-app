@@ -82,6 +82,16 @@ export const loadEvents$ = (action$: ActionsObservable<LoadEvents>) =>
         ))
   );
 
+/* export const loadEventsForEdit = (action$: ActionsObservable<>) =>
+  action$.pipe(
+    ofType(EventsActionTypes),
+    switchMap(action =>
+      from(HttpWrapper.post('api/users/isAdmin', action.payload))
+      .pipe(
+        map((res) => new LoadEventsSuccess())
+      ))
+  ); */
+
 export const loadEvent$ = (action$: ActionsObservable<LoadEvent>) =>
   action$.pipe(
     ofType(EventsActionTypes.LoadEvent),

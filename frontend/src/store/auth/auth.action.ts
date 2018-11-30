@@ -16,7 +16,8 @@ export enum AuthTypes {
   RegistrationSuccess = '[auth] Registration (Success)',
   RegistrationError = '[auth] Registration (Error)',
   SocialNetworksLogin = '[auth] Social Networks Login',
-  LoginError = '[auth] Login (error)'
+  LoginError = '[auth] Login (error)',
+  IsAdmin = '[auth] Check User For Admin Role'
 }
 
 @action()
@@ -69,6 +70,13 @@ export class LoginError {
   public readonly type = AuthTypes.LoginError;
 }
 
+@action()
+export class IsAdmin {
+  public readonly type = AuthTypes.IsAdmin;
+
+  constructor(public payload: number) { }
+}
+
 export type AuthActions =
   | RegisterUser
   | LoginUser
@@ -77,4 +85,5 @@ export type AuthActions =
   | RegistrationSuccess
   | RegistrationError
   | SocialNetworksLogin
-  | LoginError;
+  | LoginError
+  | IsAdmin;
