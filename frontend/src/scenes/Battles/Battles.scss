@@ -22,7 +22,29 @@
     height: 100vh;
     @include flexbox-center-all();
   }
+
+  &__github-svg {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 0;
+    fill:#151513;
+    transform: rotate(-90deg);
+  }
+
+  &__github-url {
+    color: #fff;
+  }
+
+  &__github-url:hover &__octo-arm {
+    animation: github-animation 560ms ease-in-out;
+  }
+
+  &__octo-arm {
+    transform-origin: 130px 106px;
+  }
 }
+
 @include respond-to(extra-small-range) {
   .ca-homepage {
     &__container {
@@ -47,23 +69,12 @@
   }
 }
 @include respond-to(medium-range) {
-  .ca-game-card {
-    
-  }
   .ca-homepage {
-  &__container-for-games {
-    margin-top: 6rem;
-    margin-right: 3rem;
-    margin-left: 3rem;
-    display: flex;
-  }
-}
-}
-@include respond-to(large-range) {
-  .ca-game-card {
-  }
-}
-@include respond-to(extra-large-range) {
-  .ca-game-card {
+    &__container-for-games {
+      margin-top: 6rem;
+      margin-right: 3rem;
+      margin-left: 3rem;
+      display: flex;
+    }
   }
 }
