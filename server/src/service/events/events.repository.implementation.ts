@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { EventsRepository } from 'service/events/events.repository';
-import { Event, EventModel } from 'models';
+import { Event, EventModel, UserRoles } from 'models';
 import { LoggerService } from 'service/logger';
 
 @injectable()
@@ -8,48 +8,17 @@ export class EventsRepositoryImplementation implements EventsRepository {
 
   @inject(LoggerService) private loggerService: LoggerService;
 
-  public async addEvent(event: Event): Promise<void> {
-    const gameEvent = EventModel.build({
-      id: event.id,
-      title: event.title,
-      description: event.description,
-      city: event.description,
-      place: event.place,
-      address: event.address,
-      location: event.locationX,
-      begginingInTime: event.begginingInTime,
-      begginingDate: event.begginingDate
-    });
-
+  public async addEvent(event: Event, id: number): Promise<void> {
     try {
-      await gameEvent.save();
-      this.loggerService.infoLog(`event with id ${event.id} saved succesfull`);
-    } catch (err) {
-      this.loggerService.errorLog('sequilize add event error');
-
-      throw { message: 'sequilize add event error' };
-    }
-  }
-
-  public async deleteEvent(eventId: number): Promise<void> {
-    try {
-      await EventModel.destroy({
+      const user = await UserRoles.findOne({
         where: {
-          id: eventId
+          userId: id,
+          roleId: 2
         }
       });
-      this.loggerService.infoLog(`event with id ${eventId} deleted succesfull`);
-    } catch (err) {
-      this.loggerService.errorLog('sequilize delete event error');
 
-      throw { message: 'sequilize delete event error' };
-    }
-  }
-
-  public async editEvent(event: Event): Promise<Event[]> {
-    try {
-      await EventModel.update(
-        {
+      if (user) {
+        const gameEvent = EventModel.build({
           id: event.id,
           title: event.title,
           description: event.description,
@@ -59,18 +28,87 @@ export class EventsRepositoryImplementation implements EventsRepository {
           location: event.locationX,
           begginingInTime: event.begginingInTime,
           begginingDate: event.begginingDate
-        },
-        {
-          where: { id: event.id }
         });
-      const updatedEvent = await EventModel.findAll({
+        await gameEvent.save();
+        this.loggerService.infoLog(`event with id ${event.id} added succesfull`);
+      } else {
+        this.loggerService.infoLog(`user with id ${id} is not admin`);
+
+        throw { message: `user with id ${id} is not admin` };
+      }
+    } catch (err) {
+      this.loggerService.errorLog('sequilize add event error');
+
+      throw { message: 'sequilize add event error' };
+    }
+  }
+
+  public async deleteEvent(eventId: number, id: number): Promise<void> {
+    try {
+      const user = await UserRoles.findOne({
         where: {
-          id: event.id
+          userId: id,
+          roleId: 2
         }
       });
-      this.loggerService.infoLog(`event with id ${event.id} edited succesfull`);
 
-      return updatedEvent;
+      if (user) {
+        await EventModel.destroy({
+          where: {
+            id: eventId
+          }
+        });
+        this.loggerService.infoLog(`event with id ${eventId} deleted succesfull`);
+      } else {
+        this.loggerService.infoLog(`user with id ${id} is not admin`);
+
+        throw { message: `user with id ${id} is not admin` };
+      }
+
+    } catch (err) {
+      this.loggerService.errorLog('sequilize delete event error');
+
+      throw { message: 'sequilize delete event error' };
+    }
+  }
+
+  public async editEvent(event: Event, id: number): Promise<void> {
+    try {
+      const user = await UserRoles.findOne({
+        where: {
+          userId: id,
+          roleId: 2
+        }
+      });
+
+      if (user) {
+        this.loggerService.infoLog(`user with id ${id} is admin`);
+        await EventModel.update(
+          {
+            id: event.id,
+            title: event.title,
+            description: event.description,
+            city: event.description,
+            place: event.place,
+            address: event.address,
+            location: event.locationX,
+            begginingInTime: event.begginingInTime,
+            begginingDate: event.begginingDate
+          },
+          {
+            where: { id: event.id }
+          });
+        const updatedEvent = await EventModel.findAll({
+          where: {
+            id: event.id
+          }
+        });
+        this.loggerService.infoLog(`event with id ${event.id} edited succesfull`);
+      } else {
+        this.loggerService.infoLog(`user with id ${id} is not admin`);
+
+        throw { message: `user with id ${id} is not admin` };
+      }
     } catch (err) {
       this.loggerService.errorLog('sequilize edit event error');
 
