@@ -241,24 +241,31 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
         });
     }
 
-    public async isAdmin(id: number): Promise<void> {
+    public async getUserRole(id: number): Promise<number> {
         try {
-            const user = await UserRoles.findOne({
+            const roleId: number = await UserRoles.findOne({
                 where: {
-                    userId: id,
-                    roleId: 2
-                }
+                    userId: id
+                },
+                attributes: ['roleId']
             });
 
-            if (user) {
-                this.loggerService.infoLog(`user with id ${id} is admin`);
+            if (roleId) {
+
+                return roleId;
             } else {
-                throw Error();
+                throw { msg: `no such user in DB with id ${id}` };
             }
         } catch (err) {
-            this.loggerService.errorLog('this user isn`t admin');
+            if (err.msg) {
+                this.loggerService.errorLog(err.msg);
 
-            throw { message: 'sequilize: this user isn`t admin' };
+                throw { msg: err.msg };
+            } else {
+                this.loggerService.errorLog(err);
+
+                throw technicalErr.databaseCrash;
+            }
         }
     }
 }
