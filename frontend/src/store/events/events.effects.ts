@@ -32,7 +32,7 @@ export const addEvent$ = (action$: ActionsObservable<AddEvent>) =>
     switchMap(action =>
       from(HttpWrapper.post('api/events/add-event', action.payload))
         .pipe(
-          map(res => new AddEventSuccess(action.payload)),
+          map(res => new AddEventSuccess(action.payload.event)),
           catchError((error) => {
             const messages: ErrorBlock[] = [{ msg: error.response.body }];
             return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new AddEventError());
@@ -46,7 +46,7 @@ export const deleteEvent$ = (action$: ActionsObservable<DeleteEvent>) =>
     switchMap(action =>
       from(HttpWrapper.post('api/events/delete-event', action.payload))
         .pipe(
-          map(res => new DeleteEventSuccess(action.payload)),
+          map(res => new DeleteEventSuccess(action.payload.event)),
           catchError((error) => {
             const messages: ErrorBlock[] = [{ msg: error.response.body }];
             return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new DeleteEventError());
@@ -60,7 +60,7 @@ export const editEvent$ = (action$: ActionsObservable<EditEvent>) =>
     switchMap(action =>
       from(HttpWrapper.post('api/events/edit-event', action.payload))
         .pipe(
-          map(res => new EditEventSuccess(action.payload)),
+          map(res => new EditEventSuccess(action.payload.event)),
           catchError((error) => {
             const messages: ErrorBlock[] = [{ msg: error.response.body }];
             return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new EditEventError());
@@ -81,16 +81,6 @@ export const loadEvents$ = (action$: ActionsObservable<LoadEvents>) =>
           })
         ))
   );
-
-/* export const loadEventsForEdit = (action$: ActionsObservable<>) =>
-  action$.pipe(
-    ofType(EventsActionTypes),
-    switchMap(action =>
-      from(HttpWrapper.post('api/users/isAdmin', action.payload))
-      .pipe(
-        map((res) => new LoadEventsSuccess())
-      ))
-  ); */
 
 export const loadEvent$ = (action$: ActionsObservable<LoadEvent>) =>
   action$.pipe(

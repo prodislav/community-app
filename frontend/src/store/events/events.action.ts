@@ -23,7 +23,7 @@ export enum EventsActionTypes {
 export class AddEvent {
   public readonly type = EventsActionTypes.AddEvent;
 
-  public constructor(public payload: Event) {}
+  public constructor(public payload: { event: Event, userId: number }) {}
 }
 
 @action()
@@ -42,7 +42,7 @@ export class AddEventError {
 export class DeleteEvent {
   public readonly type = EventsActionTypes.DeleteEvent;
 
-  public constructor(public payload: Event) {}
+  public constructor(public payload: { event: Event, userId: number }) {}
 }
 
 @action()
@@ -61,7 +61,7 @@ export class DeleteEventError {
 export class EditEvent {
   public readonly type = EventsActionTypes.EditEvent;
 
-  public constructor(public payload: Event) {}
+  public constructor(public payload: { event: Event, userId: number }) {}
 }
 
 @action()
