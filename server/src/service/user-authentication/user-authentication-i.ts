@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import uuid from 'uuid/v4';
 
-import { RoleModel, UserModel, UserRoles } from 'models';
+import { RoleModel, UserModel, UserRoles, Roles } from 'models';
 import { Role, User } from 'interfaces';
 import { logicErr, technicalErr } from 'errors';
 
@@ -93,12 +93,14 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
                     return reject(logicErr.notFoundUser);
                 } else {
                     const isMatch = await bcrypt.compare(password, user.password);
-                    if (isMatch) {
+                    const roleId = await this.getUserRole(user.id);
+                    if (isMatch && roleId) {
                         const payload = {
                             id: user.id,
                             name: user.name,
                             email: user.email,
                             token: user.token,
+                            roleId
                         };
                         jwt.sign(payload, keys.secretOrKey, (error: Error, token: string) => {
                             if (error) {
@@ -214,8 +216,8 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
                             email: savedUser.email,
                             token: savedUser.token,
                             imageUrl: savedUser.imageUrl,
+                            roleId: userRole.id
                         };
-                        console.log('AAAAAAAAAAAAA', payload);
 
                         jwt.sign(payload, keys.secretOrKey, (error: Error, token: string) => {
                             if (error) {
@@ -243,13 +245,12 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
 
     public async getUserRole(id: number): Promise<number> {
         try {
-            const roleId: number = await UserRoles.findOne({
+            const { roleId }: { roleId: number } = await UserRoles.findOne({
                 where: {
                     userId: id
                 },
                 attributes: ['roleId']
             });
-
             if (roleId) {
 
                 return roleId;

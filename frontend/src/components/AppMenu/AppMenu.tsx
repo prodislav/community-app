@@ -82,6 +82,7 @@ export class AppMenu extends React.Component<AppMenuProps, AppMenuState> {
                         {
                           appMenuItems.map(item => {
                             return (
+                              !item.disabled &&
                               <MenuItem key={item.title} onClick={item.action} className={classes.menuItem} >
                                 <ListItemIcon className={classes.icon}>
                                   {item.icon}

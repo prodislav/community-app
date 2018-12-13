@@ -1,9 +1,7 @@
 import { Avatar } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
-// (Yegor): comment icons imports cuz of temporary removed nav links
-// import SettingsIcon from '@material-ui/icons/SettingsRounded';
-// import AdminIcon from '@material-ui/icons/SupervisorAccount';
+import AdminIcon from '@material-ui/icons/SupervisorAccount';
 
 import * as Cookies from 'js-cookie';
 import * as jwt_decode from 'jwt-decode';
@@ -52,8 +50,6 @@ import {
 
 import {
   AppMenu,
-  CaAddGame,
-  CaEditGame,
   CaLogo,
   CaNavbar,
   CaSelect,
@@ -68,16 +64,15 @@ import {
   AuthStatus,
   ErrorBlock,
   Languages,
+  Roles,
   transitionDirection,
 } from 'models';
-
-import { CaMyGames } from '../MyGames/MyGames';
 
 import { RootProps } from './Root.model';
 
 import './root.scss';
 
-const token = Cookies.get('jwtToken');
+const token = Cookies.get('jwtTokenUser');
 
 if (token) {
   setAuthToken(token);
@@ -148,18 +143,12 @@ export class RootComponent extends React.Component<RootProps> {
 
     const isAuthorized = authStatus === AuthStatus.Authorized;
     const appMenuItems: AppMenuItem[] = [
-      // (Yegor): temporary hide settings cuz they aren't ready yet
-      // {
-      //   icon: <SettingsIcon />,
-      //   title: 'settings',
-      //   action: () => this.props.history.push('/settings')
-      // },
-      // (Yegor): hide nav link to admin page
-      // {
-      //   icon: <AdminIcon />,
-      //   title: 'adminPage',
-      //   action: () => this.props.history.push('/_admin_console')
-      // },
+      {
+        icon: <AdminIcon />,
+        title: 'adminPage',
+        action: () => window.location.href = 'http://localhost:8000/#/',
+        disabled: this.props.user && this.props.user.roleId !== Roles.Admin
+      },
       {
         icon: <LogoutIcon />,
         title: 'logout',
@@ -315,29 +304,6 @@ export class RootComponent extends React.Component<RootProps> {
               )}
             />
 
-            <Route
-              exact={true}
-              path='/_admin_console'
-              render={props => (
-                <CaMyGames {...props} />
-              )}
-            />
-
-            <Route
-              exact={true}
-              path='/_admin_console/add-game'
-              render={props => (
-                <CaAddGame {...props} />
-              )}
-            />
-
-            <Route
-              exact={true}
-              path='/_admin_console/edit-game/:idOfTheGame'
-              render={props => (
-                <CaEditGame {...props} />
-              )}
-            />
             <Route
               exact={true}
               path='/settings'

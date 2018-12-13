@@ -31,7 +31,7 @@ export const loginUser$ = (actions$: ActionsObservable<LoginUser>) =>
       from(HttpWrapper.post<UserFieldsToLogin, { token: string }>('api/users/login', action.payload)).pipe(
         map(res => {
           const { token } = res.data;
-          Cookies.set('jwtToken', token);
+          Cookies.set('jwtTokenUser', token);
           setAuthToken(token);
           const decoded: FrontEndUser = jwt_decode(token);
 
@@ -83,7 +83,7 @@ export const logoutUser$ = (actions$: ActionsObservable<LogoutUser>) =>
   actions$.pipe(
     ofType(AuthTypes.LogoutUser),
     map(() => {
-      Cookies.remove('jwtToken');
+      Cookies.remove('jwtTokenUser');
       deleteAuthToken();
       console.log(`logout`);
       return new SetCurrentUser(undefined);
@@ -108,7 +108,7 @@ export const socialNetworksLogin$ = (actions$: ActionsObservable<SocialNetworksL
       from(HttpWrapper.post<object, FrontEndUser>('api/users/google-auth', action.payload)).pipe(
         map(res => {
           const { token } = res.data;
-          Cookies.set('jwtToken', token);
+          Cookies.set('jwtTokenUser', token, { domain: 'okkk'});
           setAuthToken(token);
           const decoded: FrontEndUser = jwt_decode(token);
 
