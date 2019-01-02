@@ -8,7 +8,7 @@ import { ErrorBlock, SnackbarType, UserFieldsToLogin } from 'models';
 import { HttpWrapper } from 'services';
 import { SetLanguage, store } from 'store';
 import { OpenSnackbar } from 'store/snackbar';
-import { deleteAuthToken, history, setAuthToken } from 'utils';
+import { deleteAuthToken, setAuthToken } from 'utils';
 
 import {
   AuthTypes,
@@ -17,7 +17,6 @@ import {
   LogoutUser,
   RegisterUser,
   RegistrationError,
-  RegistrationSuccess,
   SetCurrentUser,
   SocialNetworksLogin,
 } from './auth.action';
@@ -56,7 +55,10 @@ export const registerUser$ = (actions$: ActionsObservable<RegisterUser>) =>
     ofType(AuthTypes.RegisterUser),
     switchMap(action =>
       from(HttpWrapper.post('api/users/register', action.payload)).pipe(
-        map(() => new RegistrationSuccess('/login')),
+        map(() => {
+          const user: UserFieldsToLogin = { email: action.payload.email, password: action.payload.password };
+          return new LoginUser(user);
+        }),
         catchError((error) => {
           const messages: ErrorBlock[] =
             !error.response ? [{ msg: error.message }] :
@@ -69,14 +71,6 @@ export const registerUser$ = (actions$: ActionsObservable<RegisterUser>) =>
         })
       )
     )
-  );
-
-export const successRegistration$ = (action$: ActionsObservable<RegistrationSuccess>) =>
-  action$.ofType(AuthTypes.RegistrationSuccess).pipe(
-    map(action => {
-      history.push(action.payload);
-    }),
-    ignoreElements()
   );
 
 export const logoutUser$ = (actions$: ActionsObservable<LogoutUser>) =>
@@ -132,7 +126,6 @@ export const AuthEffects = [
   loginUser$,
   registerUser$,
   logoutUser$,
-  successRegistration$,
   setCurrentUser$,
   socialNetworksLogin$,
 ];

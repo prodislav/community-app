@@ -21,12 +21,6 @@ export const authReducer = (state = initialState, action: AuthActions) => {
                 spinnerRun: true
             };
         }
-        case AuthTypes.RegistrationSuccess: {
-            return {
-                ...state,
-                spinnerRun: false
-            };
-        }
         case AuthTypes.LoginUser: {
             return {
                 ...state,
