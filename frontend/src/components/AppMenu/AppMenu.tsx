@@ -61,9 +61,9 @@ export class AppMenu extends React.Component<AppMenuProps, AppMenuState> {
                 onClick={this.handleIconClick}
                 className={classes.icon}
               >
-              {imageUrl ?
-                <Avatar src={imageUrl} /> :
-                <AccountCircle />}
+                {imageUrl ?
+                  <Avatar src={imageUrl} /> :
+                  <AccountCircle />}
               </IconButton>
 
               <Popper open={open} anchorEl={anchorEl} transition={true} disablePortal={true}>
