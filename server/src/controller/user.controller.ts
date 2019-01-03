@@ -154,11 +154,25 @@ export class UserController {
    * if user with this id is exist then return roleId
    */
   @httpGet('/get-user-role')
-  public async getEventsForChange(req: Request, res: Response): Promise<void | Response> {
+  public async getUserRole(req: Request, res: Response): Promise<void | Response> {
     try {
       const roleId: number = await this.userAuthenticationRepository.getUserRole(req.body.userId);
 
       return res.status(200).json(roleId);
+    } catch (err) {
+      return res.status(500).json(err.msg);
+    }
+  }
+
+  @httpPost('/get-user-links')
+  public async getUserLinks(req: Request, res: Response): Promise<void | Response> {
+    try {
+      console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', req.body.userId );
+      const userLinks: string[] = await this.userAuthenticationRepository.getUserLinks(req.body.userId);
+
+      console.log('BBBBBBBBBBBB', userLinks[0]);
+
+      return res.status(200).json(userLinks);
     } catch (err) {
       return res.status(500).json(err.msg);
     }

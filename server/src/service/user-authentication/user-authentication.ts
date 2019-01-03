@@ -15,4 +15,6 @@ export abstract class UserAuthenticationRepository {
         : Promise<{ success: boolean, token: string }>;
 
     public abstract getUserRole(id: number): Promise<number>;
+
+    public abstract getUserLinks(id: number): Promise<string[]>;
 }
