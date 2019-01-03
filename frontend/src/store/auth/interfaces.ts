@@ -3,6 +3,7 @@ import { AuthStatus, /* Roles */ } from 'models';
 export interface AuthState {
   status: AuthStatus;
   user: FrontEndUser | undefined;
+  appMenuLinks: string[];
   spinnerRun: boolean;
 }
 

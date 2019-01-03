@@ -16,6 +16,8 @@ export enum AuthTypes {
   RegistrationError = '[auth] Registration (Error)',
   SocialNetworksLogin = '[auth] Social Networks Login',
   LoginError = '[auth] Login (error)',
+  GetUserLinks = '[auth] Get User Links (error)',
+  GetUserLinksSuccess = '[auth] Get User Links Success (error)',
 }
 
 @action()
@@ -61,6 +63,20 @@ export class LoginError {
   public readonly type = AuthTypes.LoginError;
 }
 
+@action()
+export class GetUserLinks {
+  public readonly type = AuthTypes.GetUserLinks;
+
+  constructor(public userId: number) { }
+}
+
+@action()
+export class GetUserLinksSuccess {
+  public readonly type = AuthTypes.GetUserLinksSuccess;
+
+  constructor(public userLinks: string[]) { }
+}
+
 export type AuthActions =
   | RegisterUser
   | LoginUser
@@ -68,4 +84,6 @@ export type AuthActions =
   | SetCurrentUser
   | RegistrationError
   | SocialNetworksLogin
+  | GetUserLinks
+  | GetUserLinksSuccess
   | LoginError;

@@ -64,7 +64,6 @@ import {
   AuthStatus,
   ErrorBlock,
   Languages,
-  Roles,
   transitionDirection,
 } from 'models';
 
@@ -139,22 +138,35 @@ export class RootComponent extends React.Component<RootProps> {
     );
   }
 
+  public generateAppMenuItems = (title: string, appMenuItems: AppMenuItem[]): AppMenuItem[] => {
+    const isAuthorized = this.props.status === AuthStatus.Authorized;
+    switch (title) {
+      case 'adminPage': {
+        return [...appMenuItems, {
+          icon: <AdminIcon />,
+          title: 'adminPage',
+          action: () => window.location.href = 'http://localhost:8000/#/',
+        }];
+      }
+      case 'logout': {
+        return [...appMenuItems, {
+          icon: <LogoutIcon />,
+          title: 'logout',
+          action: isAuthorized ? this.logoutUser : this.redToLogin
+        }];
+      }
+      default: return appMenuItems;
+    }
+  }
+
   public getNavbar(authStatus: number): JSX.Element {
 
     const isAuthorized = authStatus === AuthStatus.Authorized;
-    const appMenuItems: AppMenuItem[] = [
-      {
-        icon: <AdminIcon />,
-        title: 'adminPage',
-        action: () => window.location.href = 'http://localhost:8000/#/',
-        disabled: this.props.user && this.props.user.roleId !== Roles.Admin
-      },
-      {
-        icon: <LogoutIcon />,
-        title: 'logout',
-        action: isAuthorized ? this.logoutUser : this.redToLogin
-      }
-    ];
+    let appMenuItems: AppMenuItem[] = [];
+
+    this.props.appMenuLinks.filter(item => {
+      appMenuItems = this.generateAppMenuItems(item, appMenuItems);
+    });
 
     const { user, isSnackbarOpen, snackbarType, errors } = this.props;
 
@@ -356,6 +368,7 @@ const mapStateToProps = (state: AppState) => ({
   isSnackbarOpen: state.snackbarUi.isOpen,
   snackbarType: state.snackbarUi.type,
   user: state.auth.user,
+  appMenuLinks: state.auth.appMenuLinks,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

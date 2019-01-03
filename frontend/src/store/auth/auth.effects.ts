@@ -12,6 +12,8 @@ import { deleteAuthToken, setAuthToken } from 'utils';
 
 import {
   AuthTypes,
+  GetUserLinks,
+  GetUserLinksSuccess,
   LoginError,
   LoginUser,
   LogoutUser,
@@ -90,9 +92,36 @@ export const setCurrentUser$ = (action$: ActionsObservable<SetCurrentUser>) =>
       const user: FrontEndUser | undefined = action.payload;
       if (user) {
         store.dispatch(new SetLanguage(user.email));
+        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', user.id);
+        store.dispatch(new GetUserLinks(user.id));
+        console.log('AAAAAAAAAA2222222');
       }
     }),
     ignoreElements()
+  );
+
+export const getUserLinks$ = (actions$: ActionsObservable<GetUserLinks>) =>
+  actions$.pipe(
+    ofType(AuthTypes.GetUserLinks),
+    switchMap(action =>
+      from(HttpWrapper.post<{userId: number}, string[]>('api/users/get-user-links', { userId: action.userId })).pipe(
+        map(res => {
+          console.log('\x1b[33m%s\x1b[0m', 'here is userLinks on Front', res.data);
+          return new GetUserLinksSuccess(res.data);
+        }),
+        catchError((error) => {
+          console.log('\x1b[33m%s\x1b[0m', 'here is error getAppMenuLinks', error);
+          const messages: ErrorBlock[] =
+            !error.response ? [{ msg: error.message }] :
+              error.name !== 'Error' ? [{ msg: error.message }] :
+                Array.isArray(error.response.data) ? error.response.data :
+                  [error.response.data];
+
+          return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new RegistrationError()
+          );
+        })
+      )
+    )
   );
 
 export const socialNetworksLogin$ = (actions$: ActionsObservable<SocialNetworksLogin>) =>
@@ -102,7 +131,7 @@ export const socialNetworksLogin$ = (actions$: ActionsObservable<SocialNetworksL
       from(HttpWrapper.post<object, FrontEndUser>('api/users/google-auth', action.payload)).pipe(
         map(res => {
           const { token } = res.data;
-          Cookies.set('jwtTokenUser', token, { domain: 'okkk'});
+          Cookies.set('jwtTokenUser', token);
           setAuthToken(token);
           const decoded: FrontEndUser = jwt_decode(token);
 
@@ -128,4 +157,5 @@ export const AuthEffects = [
   logoutUser$,
   setCurrentUser$,
   socialNetworksLogin$,
+  getUserLinks$
 ];

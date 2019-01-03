@@ -39,6 +39,18 @@ export const authReducer = (state = initialState, action: AuthActions) => {
                 spinnerRun: false
             };
         }
+        case AuthTypes.GetUserLinks: {
+            return {
+                ...state,
+                spinnerRun: true
+            };
+        }
+        case AuthTypes.GetUserLinksSuccess: {
+            return {
+                ...state,
+                appMenuLinks: action.userLinks
+            };
+        }
         default:
             return state;
     }
