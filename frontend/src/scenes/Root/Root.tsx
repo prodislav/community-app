@@ -26,6 +26,7 @@ import {
   CaStatisticPage,
   CaUserSettings,
   CurrentBattle,
+  EventPage,
   Landing,
   PageNotFound,
 } from 'scenes';
@@ -337,6 +338,14 @@ export class RootComponent extends React.Component<RootProps> {
               path='/events'
               render={props => (
                 <CaEvents {...props} />
+              )}
+            />
+
+            <Route
+              exact={true}
+              path='/event'
+              render={props => (
+                <EventPage {...props} />
               )}
             />
 
