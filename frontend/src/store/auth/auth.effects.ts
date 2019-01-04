@@ -81,7 +81,7 @@ export const logoutUser$ = (actions$: ActionsObservable<LogoutUser>) =>
     map(() => {
       Cookies.remove('jwtTokenUser');
       deleteAuthToken();
-      console.log(`logout`);
+
       return new SetCurrentUser(undefined);
     })
   );
@@ -104,12 +104,10 @@ export const getUserLinks$ = (actions$: ActionsObservable<GetUserLinks>) =>
     switchMap(action =>
       from(HttpWrapper.post<{ userId: number }, string[]>('api/users/get-user-links', { userId: action.userId })).pipe(
         map(res => {
-          console.log('here is userLinks on Front', res.data);
+
           return new GetUserLinksSuccess(res.data);
         }),
         catchError((error) => {
-          //TODO: fix catching errors
-          console.log('here is error getAppMenuLinks', error.response.data);
           const messages: ErrorBlock[] = [{ msg: error.response.data }];
 
           return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new RegistrationError()
