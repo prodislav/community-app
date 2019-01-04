@@ -250,8 +250,6 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
                 attributes: ['roleId']
             });
 
-            console.log(roleId);
-
             if (roleId === RolesId.Admin) {
                 return ['adminPage', 'logout'];
             } else if (roleId === RolesId.User) {
@@ -294,7 +292,7 @@ export class UserAuthenticationRepositoryImplementation implements UserAuthentic
             } else {
                 this.loggerService.errorLog(err);
 
-                throw technicalErr.databaseCrash;
+                throw { msg: technicalErr.databaseCrash };
             }
         }
     }

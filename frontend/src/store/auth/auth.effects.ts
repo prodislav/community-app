@@ -109,12 +109,8 @@ export const getUserLinks$ = (actions$: ActionsObservable<GetUserLinks>) =>
         }),
         catchError((error) => {
           //TODO: fix catching errors
-          console.log('here is error getAppMenuLinks', error);
-          const messages: ErrorBlock[] =
-            !error.response ? [{ msg: error.message }] :
-              error.name !== 'Error' ? [{ msg: error.message }] :
-                Array.isArray(error.response.data) ? error.response.data :
-                  [error.response.data];
+          console.log('here is error getAppMenuLinks', error.response.data);
+          const messages: ErrorBlock[] = [{ msg: error.response.data }];
 
           return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new RegistrationError()
           );

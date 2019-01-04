@@ -167,13 +167,11 @@ export class UserController {
   @httpPost('/get-user-links')
   public async getUserLinks(req: Request, res: Response): Promise<void | Response> {
     try {
-      console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', req.body.userId );
       const userLinks: string[] = await this.userAuthenticationRepository.getUserLinks(req.body.userId);
-
-      console.log('BBBBBBBBBBBB', userLinks[0]);
 
       return res.status(200).json(userLinks);
     } catch (err) {
+
       return res.status(500).json(err.msg);
     }
   }
