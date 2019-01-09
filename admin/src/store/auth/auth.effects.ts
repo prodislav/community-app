@@ -53,7 +53,7 @@ export const logoutUser$ = (actions$: ActionsObservable<LogoutUser>) =>
     map(() => {
       Cookies.remove('jwtTokenAdmin');
       deleteAuthToken();
-      console.log(`logout`);
+
       return new SetCurrentUser(undefined);
     })
   );

@@ -40,7 +40,7 @@ export class UserController {
           response.status(400).json(error);
       });
   }
-
+ 
   /**
    * @param {Request} request - data from request
    * @param {User} request.body - user data for login
