@@ -75,8 +75,6 @@ export class RegistrationFormComponent extends React.Component<RegistrationFormP
 
       this.props.registerUser(user);
     }
-
-    console.log(this.state);
   }
 
   public isValidData = (): boolean => {

@@ -13,11 +13,13 @@ export enum AuthTypes {
   LoginUser = '[auth] Login User',
   LogoutUser = '[auth] Logout User',
   SetCurrentUser = '[auth] Set Current User',
+  RegistrationSuccess = '[auth] Registration (Success)',
   RegistrationError = '[auth] Registration (Error)',
   SocialNetworksLogin = '[auth] Social Networks Login',
   LoginError = '[auth] Login (error)',
-  GetUserLinks = '[auth] Get User Links (error)',
-  GetUserLinksSuccess = '[auth] Get User Links Success (error)',
+  GetUserLinks = '[auth] Get User Links',
+  GetUserLinksError = '[auth] Get User Links (Error)',
+  GetUserLinksSuccess = '[auth] Get User Links (Success)',
 }
 
 @action()
@@ -44,6 +46,13 @@ export class LoginUser {
 @action()
 export class LogoutUser {
   public readonly type = AuthTypes.LogoutUser;
+}
+
+@action()
+export class RegistrationSuccess {
+  public readonly type = AuthTypes.RegistrationSuccess;
+
+  constructor(public payload: UserFieldsToLogin) { }
 }
 
 @action()
@@ -77,13 +86,20 @@ export class GetUserLinksSuccess {
   constructor(public userLinks: string[]) { }
 }
 
+@action()
+export class GetUserLinksError {
+  public readonly type = AuthTypes.GetUserLinksError;
+}
+
 export type AuthActions =
   | RegisterUser
   | LoginUser
   | LogoutUser
   | SetCurrentUser
+  | RegistrationSuccess
   | RegistrationError
   | SocialNetworksLogin
   | GetUserLinks
+  | GetUserLinksError
   | GetUserLinksSuccess
   | LoginError;

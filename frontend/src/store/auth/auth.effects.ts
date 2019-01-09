@@ -13,12 +13,14 @@ import { deleteAuthToken, setAuthToken } from 'utils';
 import {
   AuthTypes,
   GetUserLinks,
+  GetUserLinksError,
   GetUserLinksSuccess,
   LoginError,
   LoginUser,
   LogoutUser,
   RegisterUser,
   RegistrationError,
+  RegistrationSuccess,
   SetCurrentUser,
   SocialNetworksLogin,
 } from './auth.action';
@@ -31,6 +33,7 @@ export const loginUser$ = (actions$: ActionsObservable<LoginUser>) =>
     switchMap(action =>
       from(HttpWrapper.post<UserFieldsToLogin, { token: string }>('api/users/login', action.payload)).pipe(
         map(res => {
+          console.log('ERRRR');
           const { token } = res.data;
           Cookies.set('jwtTokenUser', token);
           setAuthToken(token);
@@ -59,7 +62,9 @@ export const registerUser$ = (actions$: ActionsObservable<RegisterUser>) =>
       from(HttpWrapper.post('api/users/register', action.payload)).pipe(
         map(() => {
           const user: UserFieldsToLogin = { email: action.payload.email, password: action.payload.password };
-          return new LoginUser(user);
+          console.log(user);
+
+          return new RegistrationSuccess(user);
         }),
         catchError((error) => {
           const messages: ErrorBlock[] =
@@ -68,11 +73,20 @@ export const registerUser$ = (actions$: ActionsObservable<RegisterUser>) =>
                 Array.isArray(error.response.data) ? error.response.data :
                   [error.response.data];
 
-          return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new RegistrationError()
-          );
+          return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new RegistrationError());
         })
       )
     )
+  );
+
+export const successRegistration$ = (action$: ActionsObservable<RegistrationSuccess>) =>
+  action$.ofType(AuthTypes.RegistrationSuccess).pipe(
+    map(action => {
+      const user: UserFieldsToLogin = { email: action.payload.email, password: action.payload.password };
+      console.log(user);
+      console.log(action.payload);
+      return new LoginUser(action.payload);
+    })
   );
 
 export const logoutUser$ = (actions$: ActionsObservable<LogoutUser>) =>
@@ -110,7 +124,7 @@ export const getUserLinks$ = (actions$: ActionsObservable<GetUserLinks>) =>
         catchError((error) => {
           const messages: ErrorBlock[] = [{ msg: error.response.data }];
 
-          return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new RegistrationError()
+          return of(new OpenSnackbar({ type: SnackbarType.Error, messages }), new GetUserLinksError()
           );
         })
       )
@@ -150,5 +164,6 @@ export const AuthEffects = [
   logoutUser$,
   setCurrentUser$,
   socialNetworksLogin$,
+  successRegistration$,
   getUserLinks$
 ];

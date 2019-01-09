@@ -33,6 +33,12 @@ export const authReducer = (state = initialState, action: AuthActions) => {
                 spinnerRun: false
             };
         }
+        case AuthTypes.RegistrationSuccess: {
+            return {
+                ...state,
+                spinnerRun: false
+            };
+        }
         case AuthTypes.LoginError: {
             return {
                 ...state,
@@ -43,6 +49,12 @@ export const authReducer = (state = initialState, action: AuthActions) => {
             return {
                 ...state,
                 spinnerRun: true
+            };
+        }
+        case AuthTypes.GetUserLinksError: {
+            return {
+                ...state,
+                spinnerRun: false
             };
         }
         case AuthTypes.GetUserLinksSuccess: {
