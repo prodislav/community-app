@@ -80,7 +80,6 @@ export const registerUser$ = (actions$: ActionsObservable<RegisterUser>) =>
 export const successRegistration$ = (action$: ActionsObservable<RegistrationSuccess>) =>
   action$.ofType(AuthTypes.RegistrationSuccess).pipe(
     map(action => {
-      const user: UserFieldsToLogin = { email: action.payload.email, password: action.payload.password };
 
       return new LoginUser(action.payload);
     })

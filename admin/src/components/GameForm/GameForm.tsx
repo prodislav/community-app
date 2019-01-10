@@ -9,6 +9,8 @@ import { history, isEmpty } from 'utils';
 
 import { GameFormProps, GameFormState } from './GameForm.model';
 
+import './GameForm.scss';
+
 const MIN_LENGTH_APP_NAME = 3;
 const MAX_LENGTH_APP_NAME = 50;
 const MIN_LENGTH_APP_DESCRIPTION = 10;
@@ -290,7 +292,7 @@ export class GameForm extends React.Component<GameFormProps, GameFormState> {
           (t) => (
             <div>
               <form
-                className='ca-Registration-form__container'
+                className='ca-game-form__container'
                 onSubmit={this.handleSubmit}
               >
                 <h2>SETTINGS FORM</h2>
@@ -313,7 +315,7 @@ export class GameForm extends React.Component<GameFormProps, GameFormState> {
 
                         this.state[`${input}Errors`].map((err: string, index: number) => {
                           return (
-                            <div className='ca-Registration-form__error' key={index}>
+                            <div className='ca-game-form__error' key={index}>
                               {t(err)}
                             </div>
                           );
@@ -324,7 +326,7 @@ export class GameForm extends React.Component<GameFormProps, GameFormState> {
                 <CaButton
                   color='primary'
                   type='submit'
-                  className='ca-Registration-form__registration-btn'
+                  className='ca-game-form__game-btn'
                    disabled={
                     !this.state.appName ||
                     !this.state.description ||
