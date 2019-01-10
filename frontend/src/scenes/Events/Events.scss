@@ -1,0 +1,26 @@
+@import "../../style/settings.scss";
+@import "../../style/mixins.scss";
+
+.ca-about {
+  &__container {
+    margin: 0 3rem;
+    max-width: 1200px;
+    @include flexbox();
+  }
+
+  &__container-for-event {
+    margin-top: 6rem;
+    margin-right: 3rem;
+    margin-left: 3rem;
+  }
+
+  &__spinner-container {
+    background-color: $background-color;
+    z-index: 100;
+    position: fixed;
+    top: $nav-height;
+    width: 100vw;
+    height: 100vh;
+    @include flexbox-center-all();
+  }
+}
