@@ -6,21 +6,21 @@ import {
   AppState,
 } from 'store';
 
-import { isEmpty } from 'utils';
-
 import {
-  AuthStatus, LoadStatus,
+  AuthStatus
 } from 'models';
+
+import { CaEventCard } from 'components/EventCard';
 
 import { EventsProps } from './Events.model';
 
 import './Events.scss';
 import { LoadEvents } from 'store/events';
-import {
+/* import {
   CaSpinner,
   GithubButton,
 } from 'components';
-
+ */
 export class CaEventsPageComponent extends React.Component<EventsProps> {
 
   public componentWillMount(): void {
@@ -37,31 +37,11 @@ export class CaEventsPageComponent extends React.Component<EventsProps> {
   // TODO: add spinner
   // TODO: add snackbar
   public render(): JSX.Element {
-    const { events, children, status } = this.props;
+
     return (
       <div className='ca-about'>
-        {children}
-        <GithubButton url='https://github.com/js-machine/community-app' />
-        {!isEmpty(events) && (
-          <div className='ca-about__container ca-global-fadeIn'>
-            {events.map((event) => (
-              <div className='ca-about__container-for-event' >
-                <div>{event.title}</div>
-                <div>{event.description}</div>
-                <div>{event.city}</div>
-                <div>{event.place}</div>
-                <div>{event.address}</div>
-                <div>{event.begginingInTime}</div>
-                <div>{event.begginingDate}</div>
-              </div>
-            ))}
-          </div>
-        )}
-        {status === LoadStatus.Fetching && (
-          <div className='ca-homepage__spinner-container'>
-            <CaSpinner isActive={status === LoadStatus.Fetching} />
-          </div>
-        )}
+        {this.props.children}
+        <CaEventCard />
       </div>
     );
   }
