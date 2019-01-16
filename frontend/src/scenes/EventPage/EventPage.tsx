@@ -27,7 +27,7 @@ export class EventPageComp extends React.Component<EventProps> {
             <I18n>{t => (
                 <div className='event'>
                     <div className='event__header'>
-                        <h1 className='event__header__title'>IT SUMMER MEETUP</h1>
+                        <h1 className='event__header__title'>IT SUMMER MEETUP {this.props.match.params.id}</h1>
                     </div>
                     <div className='event__information__wrapper'>
                         <div className='event__information'>

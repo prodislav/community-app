@@ -1,5 +1,6 @@
 export * from './store.config';
 export * from './decorators';
+export * from './events';
 export * from './auth';
 export * from './games';
 export * from './socket';

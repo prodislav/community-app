@@ -8,4 +8,5 @@ export interface EventProps {
     children?: JSX.Element;
     history: History;
     authStatus: AuthStatus;
+    match: any;
 }

@@ -19,3 +19,4 @@ export * from './ProtectedRoute';
 export * from './Author';
 export * from './YandexMap';
 export * from './GithubButton';
+export * from './EventCard';

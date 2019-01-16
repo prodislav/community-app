@@ -343,7 +343,7 @@ export class RootComponent extends React.Component<RootProps> {
 
             <Route
               exact={true}
-              path='/event'
+              path='/event/:id'
               render={props => (
                 <EventPage {...props} />
               )}

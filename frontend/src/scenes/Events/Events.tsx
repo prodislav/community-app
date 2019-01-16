@@ -4,23 +4,25 @@ import { Dispatch } from 'redux';
 
 import {
   AppState,
+  LoadEvents
 } from 'store';
 
 import {
   AuthStatus
 } from 'models';
 
-import { CaEventCard } from 'components/EventCard';
-
 import { EventsProps } from './Events.model';
 
-import './Events.scss';
-import { LoadEvents } from 'store/events';
-/* import {
+import {
+  CaEventCard,
   CaSpinner,
   GithubButton,
 } from 'components';
- */
+
+import { isEmpty } from 'utils';
+
+import './Events.scss';
+
 export class CaEventsPageComponent extends React.Component<EventsProps> {
 
   public componentWillMount(): void {
@@ -33,16 +35,29 @@ export class CaEventsPageComponent extends React.Component<EventsProps> {
     this.props.initEvents();
   }
 
-  // TODO: add check events for empty.
-  // TODO: add spinner
-  // TODO: add snackbar
   public render(): JSX.Element {
-
+    const { events, status } = this.props;
     return (
-      <div className='ca-about'>
-        {this.props.children}
-        <CaEventCard />
-      </div>
+      <>
+        <GithubButton url='https://github.com/js-machine/community-app' />
+        <div className='ca-about'>
+          {!isEmpty(events) &&
+            events.map((event) => {
+              return (
+                <CaEventCard
+                  key={event.id}
+                  model={event}
+                />
+              );
+            })
+          }
+        </div>
+        {status === 1 && (
+          <div className='ca-homepage__spinner-container'>
+            <CaSpinner isActive={status === 1} />
+          </div>
+        )}
+      </>
     );
   }
 }
