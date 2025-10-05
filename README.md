@@ -11,3 +11,10 @@ Need MySQL Server with `community-app` schema
 
 ## Auto Rebuild Mode
 To launch 'auto rebuild' mode add the line "watch: true" in webpack.dev.js file on server side
+
+## Documentation
+See `docs/`:
+- `docs/backend-api.md`
+- `docs/frontend-components.md`
+- `docs/frontend-utils.md`
+- `docs/frontend-services.md`
